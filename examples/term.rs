@@ -135,14 +135,21 @@ fn main() {
     };
     const WIDTH: usize = 128;
     const HEIGHT: usize = 64;
+    let mut binding = [false; WIDTH * HEIGHT];
+    let frame_buffer = binding.as_mut_slice();
 
-    let mut fb = FbCalc::new(WIDTH, HEIGHT, font);
+    let mut fb = FbCalc {
+        width: WIDTH,
+        height: HEIGHT,
+        font,
+        fb: frame_buffer,
+    };
     fb.render();
     for i in 0..HEIGHT {
         for j in 0..WIDTH {
             print!(
                 "{}",
-                match fb.fb[i][j] {
+                match fb.get(i, j) {
                     true => "■",
                     false => " ",
                 }
